@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarefas — Alice & Carolina</title>
+  <meta name="description" content="Tabela de tarefas domésticas para Alice e Carolina" />
+  <meta name="theme-color" content="#7c6fcd" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Tarefas" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --alice: #7c6fcd;
+      --alice-light: #eeecfb;
+      --alice-mid: #c5bff0;
+      --carolina: #d4608a;
+      --carolina-light: #fceef4;
+      --carolina-mid: #f0a8c3;
+      --bg: #f5f4f9;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --muted: #7a7a9a;
+      --border: #e2e0f0;
+      --radius: 14px;
+      --shadow: 0 2px 12px rgba(100,90,180,0.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 2rem; }
+
+    header {
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 1rem 1.25rem 0.75rem;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+    .app-title { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+    .app-title span.alice { color: var(--alice); }
+    .app-title span.carolina { color: var(--carolina); }
+
+    .week-nav { display: flex; align-items: center; gap: 8px; }
+    .week-btn { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: background 0.15s; }
+    .week-btn:active { background: var(--alice-light); }
+    .week-info { text-align: center; }
+    .week-range { font-size: 12px; font-weight: 700; color: var(--text); }
+    .week-tag { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .legend { display: flex; gap: 12px; padding: 0.75rem 1.25rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
+    .legend-dot { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
+    .ld-a { background: var(--alice-light); color: var(--alice); }
+    .ld-c { background: var(--carolina-light); color: var(--carolina); }
+    .legend-hint { margin-left: auto; font-size: 10px; color: var(--muted); font-weight: 600; align-self: center; }
+
+    .scores { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 1rem 1.25rem 0.5rem; }
+    .score-card { background: var(--surface); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
+    .score-avatar { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; flex-shrink: 0; }
+    .sa-a { background: var(--alice-light); color: var(--alice); }
+    .sa-c { background: var(--carolina-light); color: var(--carolina); }
+    .score-info { flex: 1; min-width: 0; }
+    .score-name { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .score-num { font-size: 18px; font-weight: 800; line-height: 1.1; }
+    .sn-a { color: var(--alice); }
+    .sn-c { color: var(--carolina); }
+    .score-bar-wrap { height: 4px; background: var(--bg); border-radius: 2px; margin-top: 4px; }
+    .score-bar { height: 4px; border-radius: 2px; transition: width 0.4s ease; }
+    .sb-a { background: var(--alice); }
+    .sb-c { background: var(--carolina); }
+
+    .table-wrap { padding: 0.75rem 1.25rem; overflow-x: auto; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; min-width: 340px; }
+    thead th { font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 4px; text-align: center; background: var(--bg); border-bottom: 1px solid var(--border); }
+    thead th.th-task { text-align: left; padding-left: 14px; }
+    tbody td { padding: 4px 3px; text-align: center; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody td.td-task { text-align: left; padding-left: 14px; font-size: 12px; font-weight: 700; color: var(--text); border-right: 1px solid var(--border); padding-right: 8px; white-space: nowrap; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .cell-btn {
+      width: 30px; height: 30px; border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800;
+      transition: all 0.12s;
+      color: transparent;
+    }
+    .cell-btn:active { transform: scale(0.9); }
+    .cell-done-a { background: var(--alice-light); border-color: var(--alice); color: var(--alice); }
+    .cell-done-c { background: var(--carolina-light); border-color: var(--carolina); color: var(--carolina); }
+
+    .reset-wrap { padding: 0 1.25rem; }
+    .reset-btn { width: 100%; padding: 10px; border: 1.5px dashed var(--border); border-radius: var(--radius); background: none; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+    .reset-btn:active { background: #fff0f0; border-color: #e88; color: #c55; }
+
+    .install-banner {
+      margin: 0.75rem 1.25rem 0;
+      background: linear-gradient(135deg, var(--alice-light), var(--carolina-light));
+      border: 1px solid var(--alice-mid);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 700; color: var(--alice);
+    }
+    .install-banner button { margin-left: auto; background: var(--alice); color: white; border: none; border-radius: 8px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    #install-banner { display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="app-title">⭐ <span class="alice">Alice</span> & <span class="carolina">Carolina</span></div>
+    <div class="week-nav">
+      <button class="week-btn" onclick="changeWeek(-1)" aria-label="Semana anterior">‹</button>
+      <div class="week-info">
+        <div class="week-range" id="week-range">—</div>
+        <div class="week-tag" id="week-tag">—</div>
+      </div>
+      <button class="week-btn" onclick="changeWeek(1)" aria-label="Semana seguinte">›</button>
+    </div>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot ld-a">A</div> Alice</div>
+  <div class="legend-item"><div class="legend-dot ld-c">C</div> Carolina</div>
+  <div class="legend-hint">Toca para alternar →</div>
+</div>
+
+<div id="install-banner" class="install-banner">
+  📲 Instala a app no teu telemóvel!
+  <button id="install-btn">Instalar</button>
+</div>
+
+<div class="scores">
+  <div class="score-card">
+    <div class="score-avatar sa-a">A</div>
+    <div class="score-info">
+      <div class="score-name">Alice</div>
+      <div class="score-num sn-a" id="score-a">0/0</div>
+      <div class="score-bar-wrap"><div class="score-bar sb-a" id="bar-a" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="score-card">
+    <div class="score-avatar sa-c">C</div>
+    <div class="score-info">
+      <div class="score-name">Carolina</div>
+      <div class="score-num sn-c" id="score-c">0/0</div>
+      <div class="score-bar-wrap"><div class="score-bar sb-c" id="bar-c" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table id="main-table">
+    <thead id="thead"></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div class="reset-wrap">
+  <button class="reset-btn" onclick="resetWeek()">🗑 Limpar esta semana</button>
+</div>
+
+<script>
+const TAREFAS = [
+  "🛏 Fazer a cama",
+  "🍽 Pôr a mesa",
+  "🧹 Levantar a mesa",
+  "🫧 Loiça da máquina",
+  "🗑 Depejar o lixo",
+  "🌀 Aspirar o chão"
+];
+const DIAS = ["2ª","3ª","4ª","5ª","6ª","Sáb","Dom"];
+
+let weekOffset = 0;
+let data = JSON.parse(localStorage.getItem('tarefas-v2') || '{}');
+
+function save() { localStorage.setItem('tarefas-v2', JSON.stringify(data)); }
+
+function getWeekStart(off) {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  const d = new Date(now);
+  d.setDate(now.getDate() + diff + off * 7);
+  d.setHours(0,0,0,0);
+  return d;
+}
+function fmt(d) { return d.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'}); }
+function wkey() { return 'w' + getWeekStart(weekOffset).toISOString().slice(0,10); }
+
+function getState(t,d) { return (data[wkey()] && data[wkey()][t+'_'+d]) || 0; }
+function cycleState(t,d) {
+  if (!data[wkey()]) data[wkey()] = {};
+  data[wkey()][t+'_'+d] = (getState(t,d) + 1) % 3;
+  save(); render();
+}
+
+function changeWeek(x) { weekOffset += x; render(); }
+function resetWeek() {
+  if (confirm('Apagar todas as tarefas desta semana?')) {
+    data[wkey()] = {}; save(); render();
+  }
+}
+
+function render() {
+  const mon = getWeekStart(weekOffset);
+  const sun = new Date(mon); sun.setDate(mon.getDate()+6);
+  document.getElementById('week-range').textContent = fmt(mon) + ' – ' + fmt(sun);
+  document.getElementById('week-tag').textContent = weekOffset === 0 ? 'Esta semana' : weekOffset < 0 ? Math.abs(weekOffset) + ' semana(s) atrás' : 'Daqui a ' + weekOffset + ' semana(s)';
+
+  // thead
+  let th = '<tr><th class="th-task">Tarefa</th>';
+  for (let d=0;d<7;d++) {
+    const dd = new Date(mon); dd.setDate(mon.getDate()+d);
+    th += '<th>' + DIAS[d] + '<br><span style="font-weight:600;font-size:9px;">' + fmt(dd) + '</span></th>';
+  }
+  th += '</tr>';
+  document.getElementById('thead').innerHTML = th;
+
+  // tbody
+  let tb = '';
+  for (let t=0;t<TAREFAS.length;t++) {
+    tb += '<tr><td class="td-task">' + TAREFAS[t] + '</td>';
+    for (let d=0;d<7;d++) {
+      const s = getState(t,d);
+      const cls = s===1 ? 'cell-btn cell-done-a' : s===2 ? 'cell-btn cell-done-c' : 'cell-btn';
+      const lbl = s===1 ? 'A' : s===2 ? 'C' : '';
+      tb += '<td><button class="' + cls + '" onclick="cycleState(' + t + ',' + d + ')" aria-label="' + TAREFAS[t] + ' ' + DIAS[d] + '">' + lbl + '</button></td>';
+    }
+    tb += '</tr>';
+  }
+  document.getElementById('tbody').innerHTML = tb;
+
+  // scores
+  const total = TAREFAS.length * 7;
+  let ca=0, cc=0;
+  for (let t=0;t<TAREFAS.length;t++) for (let d=0;d<7;d++) { const s=getState(t,d); if(s===1)ca++; if(s===2)cc++; }
+  document.getElementById('score-a').textContent = ca + '/' + total;
+  document.getElementById('score-c').textContent = cc + '/' + total;
+  document.getElementById('bar-a').style.width = Math.round(ca/total*100) + '%';
+  document.getElementById('bar-c').style.width = Math.round(cc/total*100) + '%';
+}
+
+render();
+
+// PWA install
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').style.display = 'flex';
+});
+document.getElementById('install-btn').addEventListener('click', () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById('install-banner').style.display = 'none';
+    });
+  }
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
