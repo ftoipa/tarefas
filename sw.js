@@ -1,10 +1,10 @@
 const CACHE = 'tarefas-v2';
 const FILES = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  '/tarefas/',
+  '/tarefas/index.html',
+  '/tarefas/manifest.json',
+  '/tarefas/icons/icon-192.png',
+  '/tarefas/icons/icon-512.png'
 ];
 
 self.addEventListener('install', e => {
