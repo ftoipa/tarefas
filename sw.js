@@ -1,4 +1,4 @@
-const CACHE = 'tarefas-v2';
+const CACHE = 'tarefas-v3';
 const FILES = [
   '/tarefas/',
   '/tarefas/index.html',
