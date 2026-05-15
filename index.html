@@ -23,6 +23,7 @@
       --carolina: #d4608a;
       --carolina-light: #fceef4;
       --carolina-mid: #f0a8c3;
+      --both: #9a4e8a;
       --bg: #f5f4f9;
       --surface: #ffffff;
       --text: #1a1a2e;
@@ -34,30 +35,26 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 2rem; }
 
-    header {
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      padding: 1rem 1.25rem 0.75rem;
-      position: sticky; top: 0; z-index: 10;
-    }
+    header { background: var(--surface); box-shadow: var(--shadow); padding: 1rem 1.25rem 0.75rem; position: sticky; top: 0; z-index: 10; }
     .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
     .app-title { font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
     .app-title span.alice { color: var(--alice); }
     .app-title span.carolina { color: var(--carolina); }
 
     .week-nav { display: flex; align-items: center; gap: 8px; }
-    .week-btn { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: background 0.15s; }
+    .week-btn { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); }
     .week-btn:active { background: var(--alice-light); }
     .week-info { text-align: center; }
     .week-range { font-size: 12px; font-weight: 700; color: var(--text); }
     .week-tag { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .legend { display: flex; gap: 12px; padding: 0.75rem 1.25rem; background: var(--surface); border-bottom: 1px solid var(--border); }
-    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
-    .legend-dot { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
-    .ld-a { background: var(--alice-light); color: var(--alice); }
-    .ld-c { background: var(--carolina-light); color: var(--carolina); }
-    .legend-hint { margin-left: auto; font-size: 10px; color: var(--muted); font-weight: 600; align-self: center; }
+    .legend { display: flex; gap: 10px; padding: 0.6rem 1.25rem; background: var(--surface); border-bottom: 1px solid var(--border); align-items: center; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; }
+    .legend-dot { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0; }
+    .ld-a { background: var(--alice-light); color: var(--alice); border: 1.5px solid var(--alice-mid); }
+    .ld-c { background: var(--carolina-light); color: var(--carolina); border: 1.5px solid var(--carolina-mid); }
+    .ld-both { background: linear-gradient(135deg, var(--alice-light) 50%, var(--carolina-light) 50%); border: 1.5px solid var(--alice-mid); color: var(--both); font-size: 8px; letter-spacing: -1px; }
+    .legend-hint { margin-left: auto; font-size: 10px; color: var(--muted); font-weight: 600; }
 
     .scores { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 1rem 1.25rem 0.5rem; }
     .score-card { background: var(--surface); border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; }
@@ -83,32 +80,31 @@
     tbody tr:last-child td { border-bottom: none; }
 
     .cell-btn {
-      width: 30px; height: 30px; border-radius: 8px;
+      width: 32px; height: 32px; border-radius: 8px;
       border: 1.5px solid var(--border);
       background: var(--bg);
       cursor: pointer;
       display: inline-flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 800;
-      transition: all 0.12s;
+      font-size: 11px; font-weight: 800;
       color: transparent;
+      transition: transform 0.1s;
+      position: relative; overflow: hidden;
     }
-    .cell-btn:active { transform: scale(0.9); }
-    .cell-done-a { background: var(--alice-light); border-color: var(--alice); color: var(--alice); }
-    .cell-done-c { background: var(--carolina-light); border-color: var(--carolina); color: var(--carolina); }
+    .cell-btn:active { transform: scale(0.82); }
+    .cell-a { background: var(--alice-light); border-color: var(--alice); color: var(--alice); }
+    .cell-c { background: var(--carolina-light); border-color: var(--carolina); color: var(--carolina); }
+    .cell-both {
+      background: linear-gradient(135deg, var(--alice-light) 50%, var(--carolina-light) 50%);
+      border-color: var(--alice-mid);
+      color: var(--both);
+      font-size: 9px; letter-spacing: -1px;
+    }
 
     .reset-wrap { padding: 0 1.25rem; }
-    .reset-btn { width: 100%; padding: 10px; border: 1.5px dashed var(--border); border-radius: var(--radius); background: none; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+    .reset-btn { width: 100%; padding: 10px; border: 1.5px dashed var(--border); border-radius: var(--radius); background: none; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; }
     .reset-btn:active { background: #fff0f0; border-color: #e88; color: #c55; }
 
-    .install-banner {
-      margin: 0.75rem 1.25rem 0;
-      background: linear-gradient(135deg, var(--alice-light), var(--carolina-light));
-      border: 1px solid var(--alice-mid);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      display: flex; align-items: center; gap: 10px;
-      font-size: 12px; font-weight: 700; color: var(--alice);
-    }
+    .install-banner { margin: 0.75rem 1.25rem 0; background: linear-gradient(135deg, var(--alice-light), var(--carolina-light)); border: 1px solid var(--alice-mid); border-radius: var(--radius); padding: 12px 14px; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; color: var(--alice); }
     .install-banner button { margin-left: auto; background: var(--alice); color: white; border: none; border-radius: 8px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
     #install-banner { display: none; }
   </style>
@@ -132,6 +128,7 @@
 <div class="legend">
   <div class="legend-item"><div class="legend-dot ld-a">A</div> Alice</div>
   <div class="legend-item"><div class="legend-dot ld-c">C</div> Carolina</div>
+  <div class="legend-item"><div class="legend-dot ld-both">A+C</div> As duas</div>
   <div class="legend-hint">Toca para alternar →</div>
 </div>
 
@@ -160,7 +157,7 @@
 </div>
 
 <div class="table-wrap">
-  <table id="main-table">
+  <table>
     <thead id="thead"></thead>
     <tbody id="tbody"></tbody>
   </table>
@@ -171,6 +168,7 @@
 </div>
 
 <script>
+// Estados: 0=ninguém | 1=Alice | 2=Carolina | 3=As duas
 const TAREFAS = [
   "🛏 Fazer a cama",
   "🍽 Pôr a mesa",
@@ -182,9 +180,9 @@ const TAREFAS = [
 const DIAS = ["2ª","3ª","4ª","5ª","6ª","Sáb","Dom"];
 
 let weekOffset = 0;
-let data = JSON.parse(localStorage.getItem('tarefas-v2') || '{}');
+let data = JSON.parse(localStorage.getItem('tarefas-v3') || '{}');
 
-function save() { localStorage.setItem('tarefas-v2', JSON.stringify(data)); }
+function save() { localStorage.setItem('tarefas-v3', JSON.stringify(data)); }
 
 function getWeekStart(off) {
   const now = new Date();
@@ -195,56 +193,74 @@ function getWeekStart(off) {
   d.setHours(0,0,0,0);
   return d;
 }
-function fmt(d) { return d.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'}); }
+function fmt(d) { return d.toLocaleDateString('pt-PT', {day:'2-digit', month:'2-digit'}); }
 function wkey() { return 'w' + getWeekStart(weekOffset).toISOString().slice(0,10); }
+function getState(t, d) { return (data[wkey()] && data[wkey()][t+'_'+d]) || 0; }
 
-function getState(t,d) { return (data[wkey()] && data[wkey()][t+'_'+d]) || 0; }
-function cycleState(t,d) {
+function cycleState(t, d) {
   if (!data[wkey()]) data[wkey()] = {};
-  data[wkey()][t+'_'+d] = (getState(t,d) + 1) % 3;
+  data[wkey()][t+'_'+d] = (getState(t,d) + 1) % 4;
   save(); render();
 }
 
 function changeWeek(x) { weekOffset += x; render(); }
+
 function resetWeek() {
   if (confirm('Apagar todas as tarefas desta semana?')) {
     data[wkey()] = {}; save(); render();
   }
 }
 
+function stateClass(s) {
+  if (s === 1) return 'cell-btn cell-a';
+  if (s === 2) return 'cell-btn cell-c';
+  if (s === 3) return 'cell-btn cell-both';
+  return 'cell-btn';
+}
+function stateLabel(s) {
+  if (s === 1) return 'A';
+  if (s === 2) return 'C';
+  if (s === 3) return 'A+C';
+  return '';
+}
+
 function render() {
   const mon = getWeekStart(weekOffset);
   const sun = new Date(mon); sun.setDate(mon.getDate()+6);
   document.getElementById('week-range').textContent = fmt(mon) + ' – ' + fmt(sun);
-  document.getElementById('week-tag').textContent = weekOffset === 0 ? 'Esta semana' : weekOffset < 0 ? Math.abs(weekOffset) + ' semana(s) atrás' : 'Daqui a ' + weekOffset + ' semana(s)';
+  document.getElementById('week-tag').textContent =
+    weekOffset === 0 ? 'Esta semana' :
+    weekOffset < 0 ? Math.abs(weekOffset) + ' semana(s) atrás' :
+    'Daqui a ' + weekOffset + ' semana(s)';
 
-  // thead
   let th = '<tr><th class="th-task">Tarefa</th>';
-  for (let d=0;d<7;d++) {
+  for (let d = 0; d < 7; d++) {
     const dd = new Date(mon); dd.setDate(mon.getDate()+d);
     th += '<th>' + DIAS[d] + '<br><span style="font-weight:600;font-size:9px;">' + fmt(dd) + '</span></th>';
   }
-  th += '</tr>';
-  document.getElementById('thead').innerHTML = th;
+  document.getElementById('thead').innerHTML = th + '</tr>';
 
-  // tbody
   let tb = '';
-  for (let t=0;t<TAREFAS.length;t++) {
+  for (let t = 0; t < TAREFAS.length; t++) {
     tb += '<tr><td class="td-task">' + TAREFAS[t] + '</td>';
-    for (let d=0;d<7;d++) {
-      const s = getState(t,d);
-      const cls = s===1 ? 'cell-btn cell-done-a' : s===2 ? 'cell-btn cell-done-c' : 'cell-btn';
-      const lbl = s===1 ? 'A' : s===2 ? 'C' : '';
-      tb += '<td><button class="' + cls + '" onclick="cycleState(' + t + ',' + d + ')" aria-label="' + TAREFAS[t] + ' ' + DIAS[d] + '">' + lbl + '</button></td>';
+    for (let d = 0; d < 7; d++) {
+      const s = getState(t, d);
+      tb += '<td><button class="' + stateClass(s) + '" onclick="cycleState(' + t + ',' + d + ')">' + stateLabel(s) + '</button></td>';
     }
     tb += '</tr>';
   }
   document.getElementById('tbody').innerHTML = tb;
 
-  // scores
+  // Pontuações — estado 3 (as duas) conta para ambas
   const total = TAREFAS.length * 7;
-  let ca=0, cc=0;
-  for (let t=0;t<TAREFAS.length;t++) for (let d=0;d<7;d++) { const s=getState(t,d); if(s===1)ca++; if(s===2)cc++; }
+  let ca = 0, cc = 0;
+  for (let t = 0; t < TAREFAS.length; t++) {
+    for (let d = 0; d < 7; d++) {
+      const s = getState(t, d);
+      if (s === 1 || s === 3) ca++;
+      if (s === 2 || s === 3) cc++;
+    }
+  }
   document.getElementById('score-a').textContent = ca + '/' + total;
   document.getElementById('score-c').textContent = cc + '/' + total;
   document.getElementById('bar-a').style.width = Math.round(ca/total*100) + '%';
@@ -253,11 +269,9 @@ function render() {
 
 render();
 
-// PWA install
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
+  e.preventDefault(); deferredPrompt = e;
   document.getElementById('install-banner').style.display = 'flex';
 });
 document.getElementById('install-btn').addEventListener('click', () => {
